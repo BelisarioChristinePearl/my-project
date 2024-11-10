@@ -1,0 +1,150 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 24px;
+}
+
+header .navbar {
+    display: flex;
+    gap: 15px;
+}
+
+header .navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+header .navbar a:hover {
+    background-color: #444;
+}
+
+/* Main section */
+.main {
+    padding: 40px 20px;
+}
+
+/* Section Titles */
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 32px;
+    color: #333;
+}
+
+/* Dashboard Container */
+.starter-section {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 20px auto;
+    width: 80%;
+}
+
+.starter-section h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.starter-section p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Form Inputs */
+form input[type="number"],
+form input[type="text"],
+form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+form button.btn-danger {
+    background-color: #f44336;
+}
+
+form button.btn-danger:hover {
+    background-color: #e53935;
+}
+
+/* Transaction History Table */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .starter-section {
+        width: 95%;
+    }
+    
+    header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header h1 {
+        font-size: 22px;
+    }
+}

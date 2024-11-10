@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Withdrawal Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container my-5">
+    <h2 class="mb-4 text-center">Client Withdrawal Management</h2>
+    
+    <!-- Add New Withdrawal Button -->
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWithdrawalModal">Add New Withdrawal</button>
+    </div>
+
+    <!-- Withdrawals Table -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Client Name</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="withdrawalTable">
+            <!-- Dynamic Content -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Withdrawal Modal -->
+<div class="modal fade" id="addWithdrawalModal" tabindex="-1" aria-labelledby="addWithdrawalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="addWithdrawalForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addWithdrawalLabel">Add New Withdrawal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="clientName" class="form-label">Client Name</label>
+                        <input type="text" class="form-control" id="clientName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="amount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" required>
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Withdrawal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Withdrawal Modal -->
+<div class="modal fade" id="editWithdrawalModal" tabindex="-1" aria-labelledby="editWithdrawalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editWithdrawalForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editWithdrawalLabel">Edit Withdrawal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editWithdrawalId">
+                    <div class="mb-3">
+                        <label for="editClientName" class="form-label">Client Name</label>
+                        <input type="text" class="form-control" id="editClientName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editAmount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="editAmount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editStatus" required>
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JavaScript and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+<!-- JavaScript for CRUD Operations -->
+<script>
+    let withdrawals = [];
+    const withdrawalTable = document.getElementById("withdrawalTable");
+
+    // Display withdrawals in the table
+    function displayWithdrawals() {
+        withdrawalTable.innerHTML = "";
+        withdrawals.forEach((withdrawal, index) => {
+            withdrawalTable.innerHTML += `
+                <tr>
+                    <td>${withdrawal.clientName}</td>
+                    <td>${withdrawal.date}</td>
+                    <td>$${withdrawal.amount}</td>
+                    <td><span class="badge ${withdrawal.status === 'Completed' ? 'bg-success' : 'bg-warning'}">${withdrawal.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" onclick="editWithdrawal(${index})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteWithdrawal(${index})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    // Add new withdrawal
+    document.getElementById("addWithdrawalForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const clientName = document.getElementById("clientName").value;
+        const amount = document.getElementById("amount").value;
+        const status = document.getElementById("status").value;
+        const date = new Date().toISOString().split('T')[0]; // Get current date
+
+        withdrawals.push({ clientName, date, amount, status });
+        displayWithdrawals();
+        document.getElementById("addWithdrawalForm").reset();
+        new bootstrap.Modal(document.getElementById("addWithdrawalModal")).hide();
+    });
+
+    // Edit withdrawal
+    function editWithdrawal(index) {
+        const withdrawal = withdrawals[index];
+        document.getElementById("editWithdrawalId").value = index;
+        document.getElementById("editClientName").value = withdrawal.clientName;
+        document.getElementById("editAmount").value = withdrawal.amount;
+        document.getElementById("editStatus").value = withdrawal.status;
+        
+        new bootstrap.Modal(document.getElementById("editWithdrawalModal")).show();
+    }
+
+    document.getElementById("editWithdrawalForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const index = document.getElementById("editWithdrawalId").value;
+        withdrawals[index].clientName = document.getElementById("editClientName").value;
+        withdrawals[index].amount = document.getElementById("editAmount").value;
+        withdrawals[index].status = document.getElementById("editStatus").value;
+        
+        displayWithdrawals();
+        new bootstrap.Modal(document.getElementById("editWithdrawalModal")).hide();
+    });
+
+    // Delete withdrawal
+    function deleteWithdrawal(index) {
+        withdrawals.splice(index, 1);
+        displayWithdrawals();
+    }
+</script>
+
+</body>
+</html>
